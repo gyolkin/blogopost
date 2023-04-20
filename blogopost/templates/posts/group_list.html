@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load user_filters %}
+{% load thumbnail %}
+{% block title %}
+Blogopost: {{ group.title }}
+{% endblock title %}
+{% block content %}
+   <div class="mainheading">
+        <h1 class="sitetitle">{{ group.title }}</h1>
+        {% if group.description %}
+        <p class="lead">
+            {{ group.description }}
+        </p>
+        {% endif %}
+    </div>
+
+    <section class="featured-posts">
+        <div class="section-title">
+            <h2><span>Записи в группе</span></h2>
+        </div>
+        <div class="card-columns listfeaturedtag">
+            {% for post in posts %}
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-5 wrapthumbnail">
+                        <a href="{{ post.get_absolute_url }}">
+                            {% thumbnail post.image "400x600" crop="center" upscale=True as im %}
+                            <div class="thumbnail" style="background-image:url({{ im.url }});"></div>
+                            {% endthumbnail %}
+                        </a>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-block">
+                            <h2 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+                            <h4 class="card-text">{{ post.text|markdown|truncatewords:20 }}</h4>
+                            <div class="metafooter">
+                                <div class="wrapfooter">
+                                    <span class="meta-footer-thumb">
+                                        {% thumbnail post.author.profile.avatar "300x300" crop="center" upscale=True as im %}
+                                        <a href="{{ post.author.profile.get_absolute_url }}"><img class="author-thumb" src="{{ im.url }}" alt="{{ post.author.username }}"></a>
+                                        {% endthumbnail %}
+                                    </span>
+                                    <span class="author-meta">
+                                    <span class="post-name"><a href="{{ post.author.profile.get_absolute_url }}">{{ post.author.username }}</a></span><br/>
+                                    <span class="post-date">{{ post.pub_date|date:"d E Y" }}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>Записей нет.</p>
+            {% endfor %}
+        </div>
+        </section>
+        {% include 'posts/includes/paginator.html' %}
+        {% endblock %}

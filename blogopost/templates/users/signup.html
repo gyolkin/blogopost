@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Регистрация{% endblock %}
+{% block content %}
+    <div class="row justify-content-center">
+        {% url 'users:signup' as url %}
+        {% include 'includes/form.html' with btn_text='Зарегистрироваться' action_url=url%}
+    </div>
+{% endblock %}

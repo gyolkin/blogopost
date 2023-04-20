@@ -1,0 +1,49 @@
+{% load static %}
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'posts:index' %}">
+        <img src="{% static 'img/logo.png' %}" alt="logo">
+        </a>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            {% with request.resolver_match.view_name as view_name %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item {% if view_name  == 'posts:index' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'posts:index' %}">Главная</a>
+                </li>
+                <li class="nav-item {% if view_name  == 'posts:follow_index' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'posts:follow_index' %}">Избранное</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                      Группы
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for group in groups %}
+                        <li><a class="dropdown-item" href="{{ group.get_absolute_url }}">{{ group.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                  </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                      <i class="fa fa-user-circle mr-1"></i>
+                      Профиль
+                    </a>
+                    <ul class="dropdown-menu">
+                    {% if request.user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{{ request.user.profile.get_absolute_url }}">Мой профиль</a></li>
+                        <li><a class="dropdown-item" href="{% url 'posts:profile_edit' request.user.username %}">Изменить профиль</a></li>
+                        <li><a class="dropdown-item" href="{% url 'posts:post_create' %}">Создать запись</a></li>
+                        <li><a class="dropdown-item" href="{% url 'users:password_change' %}">Изменить пароль</a></li>
+                        <li><a class="dropdown-item" href="{% url 'users:logout' %}">Выйти</a></li>
+                    {% else %}
+                        <li><a class="dropdown-item" href="{% url 'users:login' %}">Авторизация</a></li>
+                        <li><a class="dropdown-item" href="{% url 'users:signup' %}">Регистрация</a></li>
+                    {% endif %}
+                    </ul>
+                  </li>
+            </ul>
+            {% endwith %}
+        </div>
+    </div>

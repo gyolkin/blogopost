@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Авторизация{% endblock %}
+{% block content %}
+    <div class="row justify-content-center">
+        {% url 'users:login' as url %}
+        {% include 'includes/form.html' with btn_text='Авторизоваться' action_url=url%}
+    </div>
+{% endblock %}

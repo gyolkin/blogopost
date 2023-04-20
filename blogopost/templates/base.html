@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Учебный проект начального уровня, призванный продемонстрировать навыки работы с Python, Django, Git и Docker.">
+        <meta name="author" content="Григорий Ёлкин [/gyolkin]">
+        <link rel="icon" href="{% static 'img/favicon.ico' %}">
+        <title>{% block title %}basic title{% endblock title %}</title>
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans" rel="stylesheet">
+        <link href="{% static 'css/mediumish.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-toggleable-md navbar-light bg-white fixed-top mediumnavigation">
+            {% include 'includes/header.html' %}
+        </nav>
+        <div class="container">
+            {% block content %}basic content{% endblock %}
+            <div class="footer">
+                {% include 'includes/footer.html' %}
+            </div>
+        </div>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+    </body>
+</html>

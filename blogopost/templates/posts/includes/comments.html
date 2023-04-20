@@ -1,0 +1,25 @@
+{% load user_filters %}
+{% if user.is_authenticated %}
+  <div id="comments">
+    <h5>Добавить комментарий:</h5>
+    <form method="post" action="{% url 'posts:add_comment' post.id %}">
+      {% csrf_token %}      
+      <div class="form-group mb-2">
+        {{ form.text|addclass:"form-control" }}
+      </div>
+      <button type="submit" class="btn btn-dark">Отправить</button>
+    </form>
+  </div>
+{% endif %}
+{% for comment in comments %}
+  <div class="mt-2">
+    <div class="d-flex flex-row align-items-center mb-1">
+      <h5 class="mb-0 mr-2"><a class="link-dark text-decoration-none" href="{{ comment.author.profile.get_absolute_url }}">
+        {{ comment.author.username }}
+      </a></h5><p class="mb-0">{{ comment.pub_date|date:"d.m.Y в H:i" }}</p>
+    </div>
+    <p>
+      {{ comment.text }}
+    </p>
+  </div>
+{% endfor %}

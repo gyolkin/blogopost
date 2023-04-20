@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load user_filters %}
+{% load thumbnail %}
+{% block title %}
+Профиль пользователя {{ author.username }}
+{% endblock title %}
+{% block content %}
+<div class="row">
+    <div class="col-md-2"></div>
+        <div class="col-md-8 col-md-offset-2">
+            <div class="mainheading">
+                <div class="row post-top-meta authorpage">
+                    <div class="col-md-10 col-xs-12">
+                        <h1>{{ author.username }}</h1>
+                        {% if author.profile.bio %}<span class="author-description">{{ author.profile.bio }}</span>{% endif %}
+                        {% if user.is_authenticated and author.id is not request.user.id %}
+                            {% if following %}
+                            <a href="{% url 'posts:profile_unfollow' author.username %}" class="btn follow">Отписаться</a>
+                            {% else %}
+                            <a href="{% url 'posts:profile_follow' author.username %}" class="btn follow">Подписаться</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="col-md-2 col-xs-12">
+                        {% thumbnail author.profile.avatar "600x600" crop="center" upscale=True as im %}
+                        <img class="author-thumb" src="{{ im.url }}" alt="{{ author.username }}">
+                        {% endthumbnail %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="listrecent listrelated">
+        {% for post in posts %}
+        <div class="authorpostbox">
+            <div class="card">
+                <a href="{{ post.get_absolute_url }}">
+                {% thumbnail post.image "600x400" crop="center" upscale=True as im %}
+                <img class="img-fluid img-thumb" src="{{ im.url }}" alt="">
+                {% endthumbnail %}
+                </a>
+                <div class="card-block">
+                    <h2 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+                    <h4 class="card-text">{{ post.text|markdown|truncatewords:30 }}</h4>
+                    <div class="metafooter">
+                        <div class="wrapfooter">
+                            <span class="meta-footer-thumb">
+                            {% thumbnail author.profile.avatar "300x300" crop="center" upscale=True as im %}
+                            <a href="{{ author.profile.get_absolute_url }}"><img class="author-thumb" src="{{ im.url }}" alt="{{ author.username }}"></a>
+                            {% endthumbnail %}
+                            </span>
+                            <span class="author-meta">
+                            <span class="post-name"><a href="{{ author.profile.get_absolute_url }}">{{ author.username }}</a></span><br/>
+                            <span class="post-date">{{ post.pub_date|date:"d E Y" }}</span>{% if post.group %}<span class="dot"></span><span class="post-read">{{ post.group.title }}</span>{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>Записей нет.</p>
+        {% endfor %}
+    </div>
+{% endblock content %}
